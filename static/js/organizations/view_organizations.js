@@ -18,7 +18,7 @@ $("#comment_form").submit(function (e) {
   e.preventDefault()
   var formData = new FormData($("#comment_form")[0]);
   $.ajax({
-    url: "/activities/comment/add/",
+    url: "/organizations/comment/add/",
     type: "POST",
     data: formData,
     cache: false,
@@ -49,7 +49,7 @@ $("#comment_form").submit(function (e) {
 
 
 function edit_comment(x) {
-  $('#Comments_Contacts_Modal').modal('show');
+  $('#Comments_Organizations_Modal').modal('show');
   comment = $("#comment_name" + x).text()
   $("#commentid").val(x)
   $("#id_editcomment").val(comment)
@@ -59,7 +59,7 @@ $("#comment_edit").click(function (e) {
   e.preventDefault()
   var formData = new FormData($("#comment_edit_form")[0]);
   $.ajax({
-    url: "/activities/comment/edit/",
+    url: "/organizations/comment/edit/",
     type: "POST",
     data: formData,
     cache: false,
@@ -70,7 +70,7 @@ $("#comment_edit").click(function (e) {
         $("#CommentEditError").html(data.error).show()
       } else {
         $("#comment_name" + data.commentid).html('<pre>' + data.comment + '</pre>')
-        $('#Comments_Contacts_Modal').modal('hide');
+        $('#Comments_Organizations_Modal').modal('hide');
         $("#id_editcomment").val("")
         $("#CommentEditError").hide()
       }
@@ -87,7 +87,7 @@ function remove_comment(x) {
   var csrftoken = getCookie('csrftoken');
   var con = confirm("Do you want to Delete it for Sure!?")
   if (con == true) {
-    $.post('/activities/comment/remove/', {
+    $.post('/organizations/comment/remove/', {
       "comment_id": x,
       "csrfmiddlewaretoken": csrftoken,
     }, function (data) {

@@ -1,6 +1,7 @@
 from django import forms
 from organizations.models import Organization
-from common.models import Address, Comment
+from common.models import Comment
+
 
 class OrganizationForm(forms.ModelForm):
 
@@ -9,33 +10,22 @@ class OrganizationForm(forms.ModelForm):
         super(OrganizationForm, self).__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs = {"class": "form-control"}
-        #if self.data.get('status') == 'converted':
-        #    self.fields['account_name'].required = True
+        self.fields['description'].widget.attrs.update({
+            'rows': '6'})
         self.fields['assigned_to'].queryset = assigned_users
         self.fields['assigned_to'].required = False
-        #self.fields['teams'].required = False
-        self.fields['phone'].required = False
-        self.fields['name'].widget.attrs.update({
-            'placeholder': 'name'})
-        #self.fields['Name'].widget.attrs.update({
-            #'placeholder': 'Name'})
-        #self.fields['account_name'].widget.attrs.update({
-        #    'placeholder': 'Account Name'})
+        self.fields['teams'].required = False
 
     class Meta:
         model = Organization
-        fields = ('name','assigned_to',
-                  'phone', 'email', 'status', 'source', 'website', 'address', 'description'
+        fields = (
+            'assigned_to', 'teams', 'name',
+            'phone', 'email', 'website', 'status', 'source',  'address', 'description'
                   )
 
-    def clean_phone(self):
-        client_phone = self.cleaned_data.get('phone', None)
-        if client_phone:
-            try:
-                if int(client_phone) and not client_phone.isalpha():
-                    ph_length = str(client_phone)
-                    if len(ph_length) < 10 or len(ph_length) > 13:
-                        raise forms.ValidationError('Phone number must be minimum 10 Digits and maximum 13 Digits')
-            except (ValueError):
-                raise forms.ValidationError('Phone Number should contain only Numbers')
-            return client_phone
+class OrganizationCommentForm(forms.ModelForm):
+    comment = forms.CharField(max_length=64, required=True)
+
+    class Meta:
+        model = Comment
+        fields = ('comment', 'organization', 'commented_by')
