@@ -58,7 +58,7 @@ def activity_list(request):
 @login_required
 def add_activity(request):
     users = User.objects.filter(is_active=True).order_by('email')
-    contacts = Contact.objects.all()
+    contacts = Contact.objects.all() #hello
     form = ActivityForm(assigned_to=users, contacts=contacts)
     assignedto_list = request.POST.getlist('assigned_to')
     contacts_list = request.POST.getlist("contacts")
