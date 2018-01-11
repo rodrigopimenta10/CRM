@@ -50,7 +50,7 @@ def activity_list(request):
 
     SS = ['in process', 'converted', 'recycled', 'assigned', 'dead']
     activity_obj = sorted(activity_obj_list.order_by('enddate', 'startdate'), key=lambda p: SS.index(p.status))
-
+    #Notes
     return render(request, 'activity/activity.html', {
         'activity_obj': activity_obj, 'per_page': page, 'contacts': contacts,})
 
